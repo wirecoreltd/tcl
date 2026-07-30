@@ -7,23 +7,68 @@ Lucide icons.
 
 ## What's included
 
-This first pass covers the **Home** page end to end:
+All 6 pages from the brief are live:
 
-- `components/Nav.tsx` — sticky nav, mobile menu
+| Route | Page |
+|---|---|
+| `/` | Home |
+| `/about` | About — story, mission/vision, values, why Mauritius, journey timeline |
+| `/services` | Services — all 7 services |
+| `/life-at-tcl` | Life at TCL — culture, photo gallery, perks, testimonials |
+| `/careers` | Careers — why join, open positions, recruitment process, FAQ |
+| `/contact` | Contact — info cards, map, working contact form |
+
+Key components:
+
+- `components/Nav.tsx` — sticky nav with logo, mobile menu
 - `components/Hero.tsx` — headline, CTAs, live status badges
 - `components/OpsNetwork.tsx` — signature visual: an animated ops-network
   diagram radiating from Mauritius to London / New York / Manila / Sydney,
   each hub showing a **live local clock** (updates every 15s client-side).
-  This replaces a generic "world map" hero graphic with something grounded
-  in the actual subject: 24/7 global operations monitoring.
-- `components/WhyTCL.tsx`, `Services.tsx`, `HowWeWork.tsx`, `LifeAtTCL.tsx`,
-  `CareersCTA.tsx`, `Footer.tsx` — remaining Home sections per the brief.
-- `components/Reveal.tsx` — small IntersectionObserver wrapper used for
-  scroll-triggered fade-ups (respects `prefers-reduced-motion`).
+- `components/PageHero.tsx` — shared hero for inner pages
+- `components/Reveal.tsx` — IntersectionObserver wrapper for scroll-triggered
+  fade-ups (respects `prefers-reduced-motion`)
+- `components/PhotoGrid.tsx` + `lib/gallery.ts` — the photo system, see below
+- `components/ContactForm.tsx` + `app/api/contact/route.ts` — working
+  contact form (see "Contact form" below)
 
-The other pages (About, Services detail, Life at TCL, Careers, Contact)
-follow the same design tokens and component patterns — let me know which one
-to build next.
+### Logo
+
+`public/logo.svg` is a placeholder brand mark (used in the nav and footer).
+Replace that one file with your real logo — same filename, same folder —
+and it updates everywhere automatically. SVG is recommended for crispness,
+but a PNG works too (just update the `src="/logo.svg"` references in
+`components/Nav.tsx` and `components/Footer.tsx`).
+
+### Adding photos (no code needed)
+
+Photos live in `public/images/<category>/` — one folder per gallery
+category (`team-building`, `training`, `celebrations`, `office-life`).
+To add a photo:
+
+1. Drop a `.jpg`, `.png`, or `.webp` file into the matching folder.
+2. Commit and push (or upload directly via GitHub's web UI).
+3. Vercel redeploys automatically and the photo appears — no component or
+   config edits required.
+
+Captions are generated from the filename by default (`team-offsite.jpg` →
+"Team Offsite"). To set a custom caption, add a `captions.json` file in the
+same folder — see `public/images/<category>/HOW-TO-ADD-PHOTOS.md` for the
+exact format. Folders with no photos yet show a friendly "add your photos
+here" placeholder instead of a broken image.
+
+If you'd rather have an actual in-browser upload screen (drag-and-drop,
+no GitHub needed) — that requires wiring up file storage, e.g. Vercel Blob
+or Cloudinary. Happy to build that next if useful.
+
+### Contact form
+
+The form posts to `app/api/contact/route.ts`, which currently validates
+the payload and logs it — enough to test the flow end to end, but it
+doesn't send real emails yet. Wire in a provider like
+[Resend](https://resend.com) or [Formspree](https://formspree.io) (a code
+comment in that file shows exactly where), then add the API key as an
+environment variable in Vercel.
 
 ## Design tokens
 

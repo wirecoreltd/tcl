@@ -1,0 +1,98 @@
+import {
+  Headset,
+  Settings2,
+  FileStack,
+  Users2,
+  ShieldAlert,
+  BarChart3,
+  ArrowUpRight,
+} from "lucide-react";
+import Reveal from "./Reveal";
+
+const SERVICES = [
+  {
+    icon: Headset,
+    title: "Customer Support",
+    text: "Professional assistance across multiple channels, day and night.",
+  },
+  {
+    icon: Settings2,
+    title: "Operations Management",
+    text: "Managing daily activities to keep performance smooth and uninterrupted.",
+  },
+  {
+    icon: FileStack,
+    title: "Back Office",
+    text: "Administrative operations, verification and transaction support.",
+  },
+  {
+    icon: Users2,
+    title: "CRM Operations",
+    text: "Customer engagement through campaigns, retention and communication.",
+  },
+  {
+    icon: ShieldAlert,
+    title: "Fraud & Risk",
+    text: "Monitoring suspicious activity and safeguarding operational security.",
+  },
+  {
+    icon: BarChart3,
+    title: "Business Intelligence",
+    text: "Reports, dashboards and KPI monitoring for informed decisions.",
+  },
+];
+
+export default function Services() {
+  return (
+    <section className="py-24 lg:py-32">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <Reveal className="max-w-2xl">
+          <span className="font-mono text-xs tracking-widest text-cyan uppercase">
+            Our Services
+          </span>
+          <h2 className="mt-4 font-display font-semibold text-3xl lg:text-4xl text-offwhite tracking-tight">
+            Operational Services That Keep Businesses Moving
+          </h2>
+          <p className="mt-5 text-offwhite/65 leading-relaxed">
+            From customer support to business operations, we provide
+            reliable services tailored to international digital companies.
+          </p>
+        </Reveal>
+
+        <div className="mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {SERVICES.map((s, i) => (
+            <Reveal delay={i * 70} key={s.title}>
+              <div className="group glass-card rounded-card p-7 h-full transition-all duration-300">
+                <div className="flex items-start justify-between">
+                  <div className="inline-flex items-center justify-center h-11 w-11 rounded-xl bg-cyan/10 text-cyan mb-5">
+                    <s.icon size={20} />
+                  </div>
+                  <ArrowUpRight
+                    size={18}
+                    className="text-offwhite/25 group-hover:text-cyan transition-colors"
+                  />
+                </div>
+                <h3 className="font-display font-semibold text-lg text-offwhite">
+                  {s.title}
+                </h3>
+                <p className="mt-2.5 text-sm text-offwhite/60 leading-relaxed">
+                  {s.text}
+                </p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal delay={420} className="mt-12 flex justify-center">
+          <a
+            href="/services"
+            className="inline-flex items-center gap-2 rounded-full glass-card px-6 py-3.5 text-sm font-semibold text-offwhite hover:border-electric/50 transition-colors"
+          >
+            View All Services
+            <ArrowUpRight size={16} />
+          </a>
+        </Reveal>
+      </div>
+    </section>
+  );
+}

@@ -5,9 +5,9 @@ import { Menu, X } from "lucide-react";
 
 const LINKS = [
   { label: "About", href: "/about" },
-  { label: "Services", href: "/services" },
-  { label: "Life at TCL", href: "/life-at-tcl" },
-  { label: "Careers", href: "/careers" },
+  { label: "Services", href: "/Services" },
+  { label: "Life at TCL", href: "/LifeAtTCL" },
+  { label: "Careers", href: "/CareersCTA" },
   { label: "Contact", href: "/contact" },
 ];
 

@@ -1,13 +1,11 @@
-# Tropical Consulting Ltd — Site Rebrand (Home page)
+# Tropical Consulting Ltd — Full Site Rebrand
 
-Next.js 16 (App Router) + TypeScript + Tailwind CSS implementation of the new
-TCL homepage, built from the rebranding brief: navy/electric-blue/cyan
-palette, glassmorphism cards, 20px card radius, scroll reveals, hover states,
-Lucide icons.
+Next.js 16 (App Router) + TypeScript + Tailwind CSS. Glassmorphism cards,
+20px card radius, scroll reveals, hover states, Lucide icons. Colors are
+derived from the real TCL logo (blue / green / orange / red) on a neutral
+charcoal base.
 
-## What's included
-
-All 6 pages from the brief are live:
+## Pages
 
 | Route | Page |
 |---|---|
@@ -17,73 +15,64 @@ All 6 pages from the brief are live:
 | `/life-at-tcl` | Life at TCL — culture, photo gallery, perks, testimonials |
 | `/careers` | Careers — why join, open positions, recruitment process, FAQ |
 | `/contact` | Contact — info cards, map, working contact form |
+| `/admin/login` | Admin sign-in (not linked from the public nav) |
+| `/admin/photos` | Admin photo manager (protected) |
 
-Key components:
+## Logo & colors
 
-- `components/Nav.tsx` — sticky nav with logo, mobile menu
-- `components/Hero.tsx` — headline, CTAs, live status badges
-- `components/OpsNetwork.tsx` — signature visual: an animated ops-network
-  diagram radiating from Mauritius to London / New York / Manila / Sydney,
-  each hub showing a **live local clock** (updates every 15s client-side).
-- `components/PageHero.tsx` — shared hero for inner pages
-- `components/Reveal.tsx` — IntersectionObserver wrapper for scroll-triggered
-  fade-ups (respects `prefers-reduced-motion`)
-- `components/PhotoGrid.tsx` + `lib/gallery.ts` — the photo system, see below
-- `components/ContactForm.tsx` + `app/api/contact/route.ts` — working
-  contact form (see "Contact form" below)
+- `public/logo.png` is your real logo — swap this file (same name) to
+  update it everywhere (nav + footer).
+- Color tokens live in `tailwind.config.ts`: `electric` (blue), `cyan`
+  (green, used for "live/online" indicators), `brandOrange` and `brandRed`
+  (used sparingly — e.g. the Fraud & Risk icon is red). Change the hex
+  values there to re-tune the palette; every component already uses these
+  token names.
 
-### Logo
+## Admin photo manager — setup required
 
-`public/logo.svg` is a placeholder brand mark (used in the nav and footer).
-Replace that one file with your real logo — same filename, same folder —
-and it updates everywhere automatically. SVG is recommended for crispness,
-but a PNG works too (just update the `src="/logo.svg"` references in
-`components/Nav.tsx` and `components/Footer.tsx`).
+Photos are no longer static files in the repo — they're uploaded through
+`/admin/photos` and stored in **Vercel Blob**, because Vercel's filesystem
+is read-only in production (a `public/` folder can't accept uploads there).
+Three things need to be set up once:
 
-### Adding photos (no code needed)
+### 1. Create a Blob store
+In your Vercel project → **Storage** tab → **Create Database** → **Blob** →
+connect it to this project. Vercel automatically adds the
+`BLOB_READ_WRITE_TOKEN` environment variable for you — nothing to copy by
+hand in production.
 
-Photos live in `public/images/<category>/` — one folder per gallery
-category (`team-building`, `training`, `celebrations`, `office-life`).
-To add a photo:
+### 2. Set the admin login credentials
+In Vercel → **Project Settings → Environment Variables**, add:
 
-1. Drop a `.jpg`, `.png`, or `.webp` file into the matching folder.
-2. Commit and push (or upload directly via GitHub's web UI).
-3. Vercel redeploys automatically and the photo appears — no component or
-   config edits required.
-
-Captions are generated from the filename by default (`team-offsite.jpg` →
-"Team Offsite"). To set a custom caption, add a `captions.json` file in the
-same folder — see `public/images/<category>/HOW-TO-ADD-PHOTOS.md` for the
-exact format. Folders with no photos yet show a friendly "add your photos
-here" placeholder instead of a broken image.
-
-If you'd rather have an actual in-browser upload screen (drag-and-drop,
-no GitHub needed) — that requires wiring up file storage, e.g. Vercel Blob
-or Cloudinary. Happy to build that next if useful.
-
-### Contact form
-
-The form posts to `app/api/contact/route.ts`, which currently validates
-the payload and logs it — enough to test the flow end to end, but it
-doesn't send real emails yet. Wire in a provider like
-[Resend](https://resend.com) or [Formspree](https://formspree.io) (a code
-comment in that file shows exactly where), then add the API key as an
-environment variable in Vercel.
-
-## Design tokens
-
-| Token | Value |
+| Variable | Value |
 |---|---|
-| Background (navy) | `#081826` |
-| Background (deep/alt sections) | `#050D16` |
-| Electric blue | `#2F6FED` / light `#5B8DEF` |
-| Cyan | `#22D3EE` |
-| Text | `#F3F8FF` (offwhite) |
-| Display font | Space Grotesk |
-| Body font | Inter |
-| Mono/data font | IBM Plex Mono (used for labels, badges, live clocks) |
-| Card radius | 20px (`rounded-card`) |
-| Card style | `.glass-card` utility in `app/globals.css` |
+| `ADMIN_USERNAME` | whatever you want to log in with |
+| `ADMIN_PASSWORD` | a strong password |
+| `ADMIN_SESSION_SECRET` | any long random string (used to sign the login session — not a password you type in) |
+
+### 3. Redeploy
+Push any commit (or click "Redeploy" in Vercel) so the new environment
+variables take effect.
+
+Once that's done, go to `https://your-site.com/admin/login`, sign in, and
+you'll land on `/admin/photos` — pick a section (Team Building, Training,
+Celebrations, Office Life), drag photos in, and they show up on the live
+site immediately (no redeploy needed for new photos — only for env var
+changes).
+
+### Local development
+Copy `.env.local.example` to `.env.local` and fill in the same three
+values. For `BLOB_READ_WRITE_TOKEN` locally, copy it from Vercel → Storage
+→ your Blob store → the `.env.local` tab there (or just develop against
+production Blob storage — it's fine for a small internal tool like this).
+
+## Contact form
+
+Posts to `app/api/contact/route.ts`, which validates and logs the
+submission but doesn't send real emails yet. Wire in
+[Resend](https://resend.com) or [Formspree](https://formspree.io) — a
+comment in that file shows exactly where — then add the API key as an
+environment variable in Vercel.
 
 ## Run locally
 
@@ -94,31 +83,23 @@ npm run dev
 
 Open http://localhost:3000.
 
-## Push to GitHub
+## Push to GitHub / deploy on Vercel
+
+If this is a fresh repo:
 
 ```bash
 git init
 git add .
-git commit -m "Home page rebrand"
+git commit -m "Full site rebrand"
 git branch -M main
 git remote add origin <your-repo-url>
 git push -u origin main
 ```
 
-## Deploy on Vercel
+Then import the repo at https://vercel.com/new (framework auto-detected as
+Next.js) and add the environment variables above before or after the first
+deploy — just redeploy once they're set.
 
-1. Import the GitHub repo at https://vercel.com/new
-2. Framework preset: **Next.js** (auto-detected)
-3. No environment variables are required for this page
-4. Deploy — Vercel will run `next build` automatically
-
-## Notes
-
-- Fonts load via `next/font/google` (Space Grotesk, Inter, IBM Plex Mono) —
-  this requires network access to Google Fonts at build time, which is
-  available on Vercel and in normal dev environments.
-- Real logo, exact address/phone, and social links in `Footer.tsx` are
-  placeholders — swap in the real values before launch.
-- Photo placeholders in `LifeAtTCL.tsx` are labeled blocks; swap for real
-  photography (the brief calls for Team Building / Training /
-  Celebrations / Office Life images).
+If you're replacing an existing repo's content, just overwrite the files
+and push a commit as normal; Vercel redeploys automatically on every push
+to the connected branch.

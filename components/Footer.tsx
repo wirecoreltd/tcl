@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 lg:px-10 py-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-12">
         <div>
           <div className="flex items-center gap-2.5">
-            <img src="/logo.svg" alt="Tropical Consulting Ltd logo" className="h-8 w-8" />
+            <img src="/logo.png" alt="Tropical Consulting Ltd logo" className="h-9 w-9 rounded-md" />
             <span className="font-display font-semibold text-lg text-offwhite">
               Tropical Consulting
             </span>

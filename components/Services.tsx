@@ -64,7 +64,13 @@ export default function Services() {
             <Reveal delay={i * 70} key={s.title}>
               <div className="group glass-card rounded-card p-7 h-full transition-all duration-300">
                 <div className="flex items-start justify-between">
-                  <div className="inline-flex items-center justify-center h-11 w-11 rounded-xl bg-cyan/10 text-cyan mb-5">
+                  <div
+                    className={`inline-flex items-center justify-center h-11 w-11 rounded-xl mb-5 ${
+                      s.title === "Fraud & Risk"
+                        ? "bg-brandRed/10 text-brandRed"
+                        : "bg-cyan/10 text-cyan"
+                    }`}
+                  >
                     <s.icon size={20} />
                   </div>
                   <ArrowUpRight

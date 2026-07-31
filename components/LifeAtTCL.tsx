@@ -10,7 +10,14 @@ const CATEGORIES = [
   { key: "office-life", label: "Office Life" },
 ];
 
-export default function LifeAtTCL() {
+export default async function LifeAtTCL() {
+  const photosByCategory = await Promise.all(
+    CATEGORIES.map(async (cat) => ({
+      cat,
+      photos: (await getGalleryPhotos(cat.key)).slice(0, 1),
+    }))
+  );
+
   return (
     <section className="py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
@@ -38,17 +45,14 @@ export default function LifeAtTCL() {
 
           <Reveal delay={120}>
             <div className="grid grid-cols-2 gap-4">
-              {CATEGORIES.map((cat) => {
-                const photos = getGalleryPhotos(cat.key).slice(0, 1);
-                return (
-                  <PhotoGrid
-                    key={cat.key}
-                    photos={photos}
-                    label={cat.label}
-                    folderHint={`/public/images/${cat.key}`}
-                  />
-                );
-              })}
+              {photosByCategory.map(({ cat, photos }) => (
+                <PhotoGrid
+                  key={cat.key}
+                  photos={photos}
+                  label={cat.label}
+                  folderHint="Add photos from /admin/photos"
+                />
+              ))}
             </div>
           </Reveal>
         </div>

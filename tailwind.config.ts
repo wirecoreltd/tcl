@@ -8,22 +8,38 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Neutral charcoal base (instead of a pure navy) so all four brand
+        // accent colors below can sit on it without clashing.
         navy: {
-          DEFAULT: "#081826",
-          deep: "#050D16",
-          panel: "#0D2436",
+          DEFAULT: "#12141A",
+          deep: "#0A0B0F",
+          panel: "#1C1F27",
           line: "rgba(255,255,255,0.08)",
         },
+        // Primary accent, taken from the blue quadrant of the TCL logo.
         electric: {
-          DEFAULT: "#2F6FED",
-          light: "#5B8DEF",
-          dim: "#1A3F8F",
+          DEFAULT: "#5D6AC4",
+          light: "#7C87D6",
+          dim: "#3B4590",
         },
+        // "Live / online" accent, taken from the green quadrant of the logo.
         cyan: {
-          DEFAULT: "#22D3EE",
-          dim: "#0E8FA6",
+          DEFAULT: "#4FAE44",
+          dim: "#357A2D",
         },
-        offwhite: "#F3F8FF",
+        // Secondary accents from the remaining two logo quadrants — used
+        // sparingly (badges, hover states, the Fraud & Risk service icon)
+        // rather than as base colors, to keep the site feeling like a B2B
+        // operations partner rather than a rainbow of brand chips.
+        brandOrange: {
+          DEFAULT: "#E88B3F",
+          dim: "#B8672A",
+        },
+        brandRed: {
+          DEFAULT: "#D9394A",
+          dim: "#A32836",
+        },
+        offwhite: "#F3F5F9",
       },
       fontFamily: {
         display: ["var(--font-space-grotesk)", "sans-serif"],
@@ -58,12 +74,12 @@ const config: Config = {
         drift: "drift 6s ease-in-out infinite",
       },
       boxShadow: {
-        glow: "0 0 40px rgba(47,111,237,0.35)",
-        glowCyan: "0 0 30px rgba(34,211,238,0.25)",
+        glow: "0 0 40px rgba(93,106,196,0.35)",
+        glowCyan: "0 0 30px rgba(79,174,68,0.25)",
       },
       backgroundImage: {
         "grid-fade":
-          "radial-gradient(ellipse at top, rgba(47,111,237,0.15), transparent 60%)",
+          "radial-gradient(ellipse at top, rgba(93,106,196,0.16), transparent 60%)",
       },
     },
   },

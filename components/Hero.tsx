@@ -11,7 +11,7 @@ export default function Hero() {
       <div className="max-w-7xl mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-16 items-center">
         <div>
           <div className="inline-flex items-center gap-2 rounded-full glass-card px-4 py-2 mb-8">
-            <Globe2 size={15} className="text-cyan" />
+            <Globe2 size={15} className="text-brandOrange" />
             <span className="font-mono text-xs tracking-wide text-offwhite/80">
               Based in Mauritius · Supporting Global Operations Since 2020
             </span>

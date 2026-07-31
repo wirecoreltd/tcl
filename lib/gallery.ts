@@ -1,53 +1,57 @@
-import fs from "fs";
-import path from "path";
-
-const VALID_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp", ".avif"];
+import { list } from "@vercel/blob";
 
 export type GalleryPhoto = {
   src: string;
   alt: string;
+  pathname: string; // needed to delete the blob later from the admin panel
 };
 
+const CATEGORIES = [
+  "team-building",
+  "training",
+  "celebrations",
+  "office-life",
+] as const;
+
+export type PhotoCategory = (typeof CATEGORIES)[number];
+
+export function isValidCategory(value: string): value is PhotoCategory {
+  return (CATEGORIES as readonly string[]).includes(value);
+}
+
+export { CATEGORIES };
+
+function altFromFilename(filename: string): string {
+  const name = filename.replace(/\.[^.]+$/, "");
+  return name
+    .replace(/^\d+-/, "") // strip a leading "1699999999-" upload timestamp prefix
+    .replace(/[-_]/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 /**
- * Reads every image file inside /public/images/<category> and returns it as
- * a gallery-ready object. This is the whole "upload" workflow for
- * non-developers: drop a photo into the matching folder, commit, push —
- * no component or config file needs to be touched.
- *
- * Optional captions: if a file named `captions.json` exists in the folder
- * (e.g. { "team-offsite.jpg": "Our 2025 team offsite in Grand Baie" }),
- * those captions are used as the alt text. Otherwise a readable alt text
- * is generated from the filename.
+ * Lists every photo stored under images/<category>/ in Vercel Blob.
+ * Returns an empty array (rather than throwing) if Blob isn't configured
+ * yet, so pages can render a friendly empty state during local dev.
  */
-export function getGalleryPhotos(category: string): GalleryPhoto[] {
-  const dir = path.join(process.cwd(), "public", "images", category);
+export async function getGalleryPhotos(
+  category: string
+): Promise<GalleryPhoto[]> {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) return [];
 
-  if (!fs.existsSync(dir)) return [];
-
-  let captions: Record<string, string> = {};
-  const captionsPath = path.join(dir, "captions.json");
-  if (fs.existsSync(captionsPath)) {
-    try {
-      captions = JSON.parse(fs.readFileSync(captionsPath, "utf-8"));
-    } catch {
-      captions = {};
-    }
+  try {
+    const { blobs } = await list({ prefix: `images/${category}/` });
+    return blobs
+      .sort((a, b) => (a.uploadedAt < b.uploadedAt ? 1 : -1)) // newest first
+      .map((blob) => {
+        const filename = blob.pathname.split("/").pop() ?? blob.pathname;
+        return {
+          src: blob.url,
+          alt: altFromFilename(filename),
+          pathname: blob.pathname,
+        };
+      });
+  } catch {
+    return [];
   }
-
-  const files = fs
-    .readdirSync(dir)
-    .filter((file) =>
-      VALID_EXTENSIONS.includes(path.extname(file).toLowerCase())
-    )
-    .sort();
-
-  return files.map((file) => ({
-    src: `/images/${category}/${file}`,
-    alt:
-      captions[file] ||
-      path
-        .parse(file)
-        .name.replace(/[-_]/g, " ")
-        .replace(/\b\w/g, (c) => c.toUpperCase()),
-  }));
 }

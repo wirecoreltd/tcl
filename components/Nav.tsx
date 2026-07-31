@@ -31,7 +31,7 @@ export default function Nav() {
     >
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-6 lg:px-10 h-20">
         <a href="/" className="flex items-center gap-2.5 group">
-          <img src="/logo.svg" alt="Tropical Consulting Ltd logo" className="h-8 w-8" />
+          <img src="/logo.png" alt="Tropical Consulting Ltd logo" className="h-9 w-9 rounded-md" />
           <span className="font-display font-semibold text-lg tracking-tight text-offwhite">
             Tropical Consulting
           </span>

@@ -55,7 +55,13 @@ export default function ServicesContent() {
           {SERVICES.map((s, i) => (
             <Reveal delay={i * 60} key={s.title}>
               <div className="glass-card rounded-card p-8 h-full transition-all duration-300">
-                <div className="inline-flex items-center justify-center h-12 w-12 rounded-xl bg-electric/15 text-electric-light mb-6">
+                <div
+                  className={`inline-flex items-center justify-center h-12 w-12 rounded-xl mb-6 ${
+                    s.title === "Fraud & Risk"
+                      ? "bg-brandRed/15 text-brandRed"
+                      : "bg-electric/15 text-electric-light"
+                  }`}
+                >
                   <s.icon size={22} />
                 </div>
                 <h3 className="font-display font-semibold text-xl text-offwhite">

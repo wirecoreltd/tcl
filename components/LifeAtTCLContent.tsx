@@ -42,7 +42,14 @@ const TESTIMONIALS = [
   },
 ];
 
-export default function LifeAtTCLContent() {
+export default async function LifeAtTCLContent() {
+  const photosByCategory = await Promise.all(
+    GALLERY_CATEGORIES.map(async (cat) => ({
+      cat,
+      photos: (await getGalleryPhotos(cat.key)).slice(0, 1),
+    }))
+  );
+
   return (
     <>
       <section className="pb-4">
@@ -77,18 +84,15 @@ export default function LifeAtTCLContent() {
           </Reveal>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mt-8">
-            {GALLERY_CATEGORIES.map((cat) => {
-              const photos = getGalleryPhotos(cat.key);
-              return (
-                <Reveal key={cat.key}>
-                  <PhotoGrid
-                    photos={photos.slice(0, 1)}
-                    label={cat.label}
-                    folderHint={`/public/images/${cat.key}`}
-                  />
-                </Reveal>
-              );
-            })}
+            {photosByCategory.map(({ cat, photos }) => (
+              <Reveal key={cat.key}>
+                <PhotoGrid
+                  photos={photos}
+                  label={cat.label}
+                  folderHint="Add photos from /admin/photos"
+                />
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>

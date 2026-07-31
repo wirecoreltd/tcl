@@ -72,11 +72,18 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-navy-line py-6 text-center">
+      <div className="border-t border-navy-line py-6 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center">
         <p className="text-xs text-offwhite/40">
           © 2020–{new Date().getFullYear()} Tropical Consulting Ltd. All
           rights reserved.
         </p>
+        <span className="hidden sm:inline text-offwhite/20">·</span>
+        <a
+          href="/admin/login"
+          className="text-xs text-offwhite/30 hover:text-cyan transition-colors"
+        >
+          Admin
+        </a>
       </div>
     </footer>
   );
